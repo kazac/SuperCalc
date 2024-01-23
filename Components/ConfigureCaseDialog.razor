@@ -1,0 +1,71 @@
+﻿@using SuperCalc.Model
+
+<div class="dialog-container">
+    <div class="dialog">
+        <div class="dialog-title">
+            Case Configuration
+        </div>
+        <EditForm class="dialog-body p-2"  Model=@Case OnValidSubmit=@OnConfirm FormName="Setup">
+            <DataAnnotationsValidator />
+            <div>
+                <label for="super">Super:</label>
+                <InputText class="zxc" id="super" @bind-Value="Case.Super" />
+            </div>
+            @*<div class="text-muted mt-0">your super at commencement of the age pension, before purchase of any lifetime annuity</div>*@
+            <div>
+                <label for="assets">Other Assets:</label>
+                <InputText id="assets" class="zxc" @bind-Value="Case.Assets" />
+                @*<div class="text-muted">any assets you have other than your super and home, but included your home contents</div>*@
+            </div>
+            <div>
+                <label for="annuity">Annuity Price:</label>
+                <InputText id="annuity" class="zxc" @bind-Value="Case.Annuity" />
+                @*<div class="text-muted">optional, the purchase price of any lifetime annuity you may purchase from your superanution</div>*@
+            </div>
+            <div>
+                <label for="annuity_payment">Annuity%:</label>
+                <InputText id="annuity_payemnt" class="zxc" @bind-Value="Case.Annuity_Percent" />
+                @*<div class="text-muted">the percentage of the annuity purchase price paid each year</div>*@
+            </div>
+            <div>
+                <label for="target">Target Amount:</label>
+                <InputText id="target" class="zxc" @bind-Value="Case.Target" />
+                @*<div class="text-muted">the total income you wish to recieve</div>*@
+            </div>
+            <div>
+                <InputRadioGroup id="strategy" class="zxc" @bind-Value="@Case.Strategy">
+                    <label for="residual">Residual:</label>
+                    <InputRadio id="residual" Value="Strategy.Residual" />
+                    <label for="income">Income:</label>
+                    <InputRadio id="income" Value="Strategy.Income" />
+                </InputRadioGroup>
+            </div>
+            <div>
+                <ValidationSummary />
+            </div>
+            <div class="dialog-buttons">
+                <button type="submit" class="btn btn-primary">OK</button>
+                &nbsp; &nbsp;
+                <button class="btn btn-secondary mr-auto" @onclick="OnCancel">Cancel</button>
+            </div>
+        </EditForm>
+      @*   <div class="dialog-buttons">
+             <button class="btn btn-secondary mr-auto" @onclick="OnCancel">Cancel</button>
+              &nbsp; &nbsp;
+            <button type="submit" class="btn btn-success ml-auto" @onclick="OnConfirm">OK</button>
+        </div> *@
+@*         <div>
+            <ul>
+                <li Choosing "Income" wll calculate the minimum drawdown required to achieve the "Target" income, and any excess will be left in the super fund.</li>
+                <li>Choosing "Residual" wll calculate the annual total income that will leave the "Target" in the super fund at year 30.</li>
+            </ul>
+        </div>
+ *@    </div>
+</div>
+
+
+@code {
+    [Parameter] public Case Case { get; set; } = new();
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
+}

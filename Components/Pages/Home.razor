@@ -1,0 +1,90 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using SuperCalc.Model
+@using SuperCalc.Services
+@using SuperCalc
+@using static SuperCalc.Services.State
+@inject ProtectedSessionStorage ProtectedSessionStore
+@inject State State
+
+<PageTitle>Home</PageTitle>
+
+<h1 class="fred">Retirement Income Calculator</h1>
+
+<p>This is only an unqualified estimate, and while it has been coded to the best of my knowledge, I am not a financial advisor. Do not rely on anything shown here but seek advice from a qualified professional.
+I take no resposnibility for any of these figures being correct, and you should not base any decisions you may or may not make on these figures.
+This app should only be regarded as a motivator to obtain proper advice.</p>
+<p>All figures are in today's dollars, and are not adjusted for inflation. Any lifetime annuity is assumed to be purchased at the start of the retirement period. For the first 20 years an annuity is assumed dicounted to 60% for assets and income test purposes, thereafter to 30%.</p>
+<div class="mt-3 ms-lg-5">
+    <button type="button" class="btn btn-primary" @onclick="@(() => State.ShowNewCaseDialog())">New Scenario</button>
+</div>
+
+@if (State.ShowingNewCaseDialog)
+{
+      <ConfigureCaseDialog 
+        Case="State.CurrentCase"
+        OnCancel="State.CancelNewCaseDialog"
+        OnConfirm="State.ConfirmNewCaseDialog" 
+     />
+}
+@* <table>
+     <tr><td>Name:</td><td>@State.CurrentCase?.Name</td></tr>
+    <tr><td>Super:</td><td>@State.CurrentCase?.Super</td></tr>
+    <tr><td>Assets:</td><td>@State.CurrentCase?.Assets</td></tr>
+    <tr><td>Annuity Purchase Price:</td><td>@State.CurrentCase?.Annuity</td></tr>
+    <tr><td>Annity% per annum:</td><td>@State.CurrentCase?.Annuity_Percent</td></tr>
+    <tr><td>Target:</td><td>@State.CurrentCase?.Target</td></tr>
+</table>
+ *@
+<QuickGrid Items="@State.Lines" >
+    <PropertyColumn Property="@(p => p.year)" Align=Align.Center Sortable="false" />
+    <PropertyColumn Property="@(p => p.super)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.assets)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.asset_test)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.income_test)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.part_pension)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.annuity)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.subtotal)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.drawdown)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.total)" Format="C0" Align=Align.Right Sortable="false" />
+    <PropertyColumn Property="@(p => p.year)" Align=Align.Center Sortable="true">
+        <ColumnOptions>
+            <div class="search-box">
+                <input type="search" autofocus @onchange="SearchYear" placeholder="Year ..." />
+            </div>
+        </ColumnOptions>
+    </PropertyColumn>
+@*     <TemplateColumn Title="Action">
+        <button @onclick="(() => Edit(context))" class="btn btn-info">Edit</button>
+    </TemplateColumn>
+ *@</QuickGrid>
+@*  <div><Paginator State="@pagination"/></div> *@
+
+
+@code {
+    [SupplyParameterFromForm]
+    public string other_name { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // pagination.TotalItemCountChanged += (s, e) => StateHasChanged();
+    }
+
+   // PaginationState pagination = new PaginationState() { ItemsPerPage = 15 };
+
+   
+    private void Edit(Line line)
+    {
+    }
+
+    private void SearchYear(ChangeEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(e.Value!.ToString()))
+        {
+            
+        }
+    }
+ }
